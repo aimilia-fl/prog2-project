@@ -2,7 +2,7 @@
 
 **Team Name:** Javengers
 
-**Team Members:** 
+**Team Members:**
 
 - **Κωνσταντίνος Αλεξόπουλος :** Project Manager, API Developer, Build, CI & Integration Lead, Testing Engineer
 
@@ -17,3 +17,5 @@
 - **Μενέλαος-Γεώργιος Τσίτας:** UI Developer, Testing Engineer
 
 - **Αιμιλία Φλωρά:** Evaluation Engineer, Build, CI & Integration Lead, Testing Engineer
+
+- **Δήμητρα Ναυπλιώτου:** Elevator System Developer, Presentation Designer, Testing Engineer

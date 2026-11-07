@@ -1,0 +1,16 @@
+# Φάκελος μεταγλώττισης του Maven
+target/
+
+# Μεταφρασμένα και εκτελέσιμα αρχεία
+*.class
+*.jar
+*.war
+
+# Τοπικές ρυθμίσεις του VScode
+.vscode/
+
+# Τοπικές ρυθμίσεις του Jave Extension στο VScode
+.project
+.classpath
+.settings/
+.factorypath

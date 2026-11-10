@@ -3,6 +3,7 @@ package com.javengers.central;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import com.javengers.central.handlers.RequestHandler;
 import com.sun.net.httpserver.HttpServer;
 
 public class CentralApp {
@@ -15,7 +16,7 @@ public class CentralApp {
         try {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT),0);
 
-        server.createContext("/api/v1/central/requests");
+        server.createContext("/api/v1/central/requests",new RequestHandler());
         server.createContext("/api/v1/central/status");
 
         server.setExecutor(null);

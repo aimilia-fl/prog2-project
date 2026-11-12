@@ -1,4 +1,4 @@
-package com.javengers.central.handlers;
+package gr.aueb.dmst.javengers.central.handlers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,16 +7,14 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javengers.common.dto.PassengerRequest;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
+import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
 
 public class RequestHandler implements HttpHandler{
 
     public RequestHandler(){}
-    // private static final Pattern SOURCE_PATTERN = Pattern.compile("\"sourceFloor\"\\s*:\\s*(-?\\d+)");
-    // private static final Pattern DEST_PATTERN = Pattern.compile("\"destinationFloor\"\\s*:\\s*(-?\\d+)");
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -60,17 +58,6 @@ public class RequestHandler implements HttpHandler{
 
     }
 
-    // private PassengerRequest parseRequestBody(String body){
-    //     Matcher srcMatcher = SOURCE_PATTERN.matcher(body);
-    //     Matcher destinationMatcher = DEST_PATTERN.matcher(body);
-
-    //     if (srcMatcher.find() && destinationMatcher.find()){
-    //         int sourceFloor = Integer.parseInt(srcMatcher.group(1));
-    //         int destFloor = Integer.parseInt(destinationMatcher.group(1));
-    //         return new PassengerRequest(sourceFloor,destFloor);
-    //     }
-    //     return null;
-    // }
 
     public void responseMessage(HttpExchange exchange, int statusCode, String response) throws IOException{
         exchange.getResponseHeaders().set("Content-Type","application/json");

@@ -1,4 +1,4 @@
-package com.javengers.common.dto;
+package gr.aueb.dmst.javengers.common.dto;
 
 public class StopResponse {
     private String elevatorId;

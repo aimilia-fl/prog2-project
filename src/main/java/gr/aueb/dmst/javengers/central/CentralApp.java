@@ -1,10 +1,11 @@
-package com.javengers.central;
+package gr.aueb.dmst.javengers.central;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.javengers.central.handlers.RequestHandler;
 import com.sun.net.httpserver.HttpServer;
+
+import gr.aueb.dmst.javengers.central.handlers.RequestHandler;
 
 public class CentralApp {
 

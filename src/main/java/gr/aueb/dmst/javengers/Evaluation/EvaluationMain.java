@@ -1,9 +1,8 @@
-package com.javengers.Evaluation;
+package gr.aueb.dmst.javengers.Evaluation;
 
-import com.javengers.Evaluation.Strorage.*;
-import com.javengers.Evaluation.Generator.*;
-import com.javengers.Evaluation.RestApiEvaluation.*;
-import com.javengers.Evaluation.MathEvaluator.*;
+import gr.aueb.dmst.javengers.Evaluation.Generator.RandomGenerator;
+import gr.aueb.dmst.javengers.Evaluation.MathEvaluator.MathEvaluator;
+import gr.aueb.dmst.javengers.Evaluation.Storage.DataStorage;
 
 public class EvaluationMain {
     public static void main(String[] args) {
@@ -26,3 +25,6 @@ public class EvaluationMain {
 }
 
 }
+
+    
+

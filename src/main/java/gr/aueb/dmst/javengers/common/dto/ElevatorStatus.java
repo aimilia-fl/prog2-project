@@ -49,7 +49,7 @@ public class ElevatorStatus {
         return currentFloor;
     }
 
-    public void setCurrectFloor(int currentFloor) {
+    public void setCurrentFloor(int currentFloor) {
         this.currentFloor = currentFloor;
     }
 

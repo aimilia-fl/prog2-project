@@ -16,6 +16,8 @@ public class RequestHandler implements HttpHandler{
 
     public RequestHandler(){}
     private final ObjectMapper objectMapper = new ObjectMapper();
+    static final int MAX_FLOOR = 20;
+    static final int MIN_FLOOR = 0;
 
     @Override
     public void handle(HttpExchange exchange) throws IOException{
@@ -51,10 +53,22 @@ public class RequestHandler implements HttpHandler{
             return;
         }
 
-        if(request.getSourceFloor()<0 || request.getDestinationFloor()<0){
+        if(request.getSourceFloor() < MIN_FLOOR || request.getDestinationFloor() < MIN_FLOOR){
             responseMessage(exchange, 400, "{\"error\": \"Floors cannot be negative\"}");
                 return;
         }
+
+        if (request.getDestinationFloor() > MAX_FLOOR || request.getSourceFloor() > MAX_FLOOR){
+            responseMessage(exchange, 400, "{\"error\": \"This floor does not exist. Highest floor is %d \"}".formatted(MAX_FLOOR));
+            return;
+        }
+
+
+        //CODE WILL BE ADDED HERE ONCE WE IMPLEMENT DISPATCH ALGORITHM
+
+
+        String successJson = "{\"status\": 200, \"assignedElevator\": \"Elevator-1\"}";
+        responseMessage(exchange, 200, successJson);
 
     }
 

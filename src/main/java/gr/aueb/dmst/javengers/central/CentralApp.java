@@ -15,13 +15,14 @@ public class CentralApp {
 
         //THE CODE BELOW IS INCOMPLETE
         try {
-        HttpServer server = HttpServer.create(new InetSocketAddress(PORT),0);
+            HttpServer server = HttpServer.create(new InetSocketAddress(PORT),0);
 
-        server.createContext("/api/v1/central/requests",new RequestHandler());
-        server.createContext("/api/v1/central/status");
+            server.createContext("/api/v1/central/requests",new RequestHandler());
 
-        server.setExecutor(null);
-        System.out.println("Server running on port: " + PORT );
+            server.createContext("/api/v1/central/status");
+
+            server.setExecutor(null);
+            System.out.println("Server running on port: " + PORT );
         }catch(IOException e){
             System.err.println("Error during server creation process \n"+e);
         }

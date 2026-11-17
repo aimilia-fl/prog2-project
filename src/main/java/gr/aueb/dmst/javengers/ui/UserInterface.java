@@ -1,6 +1,5 @@
 package gr.aueb.dmst.javengers.ui;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,7 +26,7 @@ public class UserInterface{
         this.sourceFloor = sourceFloor;
     }
 
-    private String sendRequest(int destinationFloor){
+    protected String sendRequest(int destinationFloor){
 
         try {
             PassengerRequest passengerRequest = new PassengerRequest(sourceFloor, destinationFloor);
@@ -56,7 +55,7 @@ public class UserInterface{
                     return "Operation Completed and Exited with Status Code: " + response.statusCode();
                 }
             }
-        } catch (BadRequestException | InvalidMethodException | IOException | InterruptedException e) {
+        } catch (BadRequestException | InvalidMethodException e) {
             return e.getMessage();
         } catch (Exception e){
             return "Connection Failed";

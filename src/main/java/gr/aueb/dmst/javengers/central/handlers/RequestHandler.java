@@ -16,7 +16,7 @@ public class RequestHandler implements HttpHandler{
 
     public RequestHandler(){}
     private final ObjectMapper objectMapper = new ObjectMapper();
-    static final int MAX_FLOOR = 20;
+    static final int MAX_FLOOR = 200;
     static final int MIN_FLOOR = 0;
 
     @Override

@@ -1,13 +1,13 @@
 package gr.aueb.dmst.javengers.common.dto;
 
-public class MetricsResponce {
+public class MetricsResponse {
     private String ScenarioId;
     private String status;
     private Metrics metrics;
 
-    public MetricsResponce() {}
+    public MetricsResponse() {}
 
-    public MetricsResponce(String scenarioId, String status, Metrics metrics) {
+    public MetricsResponse(String scenarioId, String status, Metrics metrics) {
         ScenarioId = scenarioId;
         this.status = status;
         this.metrics = metrics;

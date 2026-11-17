@@ -1,21 +1,28 @@
 package gr.aueb.dmst.javengers.elevator.handlers;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import gr.aueb.dmst.javengers.common.dto.ElevatorStatus;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.function.Supplier;
-
-
+/**
+ * Handles GET requests for the elevator status.
+ */
 public class StatusHandler implements HttpHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Supplier<ElevatorStatus> statusSupplier;
+
+    /**
+     * Creates the handler.
+     * @param statusSupplier gives us the current status.
+     */
 
     public StatusHandler(Supplier<ElevatorStatus> statusSupplier) {
         this.statusSupplier = statusSupplier;

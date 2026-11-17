@@ -11,7 +11,7 @@ public class ElevatorResponse {
         this.status = status;
     }
 
-    public void setAssignesElevator(String assignedElevator) {
+    public void setAssignedElevator(String assignedElevator) {
         this.assignedElevator = assignedElevator;
     }
 

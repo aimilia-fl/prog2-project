@@ -1,10 +1,11 @@
 package gr.aueb.dmst.javengers.common.dto; 
 
 
+import java.util.List;
+
 import gr.aueb.dmst.javengers.elevator.model.Direction;
 import gr.aueb.dmst.javengers.elevator.model.DoorState;
-import gr.aueb.dmst.javengers.elevator.model.OperatingState;
-import java.util.List; 
+import gr.aueb.dmst.javengers.elevator.model.OperatingState; 
 
 public class ElevatorStatus {
     

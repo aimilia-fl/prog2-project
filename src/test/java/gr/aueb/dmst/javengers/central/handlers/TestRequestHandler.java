@@ -71,8 +71,8 @@ public class TestRequestHandler {
     }
 
     @Test
-    public void testFloorAbove20() throws Exception{
-        String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 21}";
+    public void testFloorAbove200() throws Exception{
+        String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 201}";
         HttpResponse<String> response = sendPostRequest(dtoBody);
         Assert.assertEquals(400, response.statusCode());
     }

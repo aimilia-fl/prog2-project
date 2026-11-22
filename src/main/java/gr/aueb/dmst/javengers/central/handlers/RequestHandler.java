@@ -12,13 +12,26 @@ import com.sun.net.httpserver.HttpHandler;
 
 import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
 
+/**
+ * Validates passenger requests for the central elevator service.
+ */
 public class RequestHandler implements HttpHandler{
 
+    /**
+     * Creates a passenger request handler.
+     */
     public RequestHandler(){}
+
     private final ObjectMapper objectMapper = new ObjectMapper();
     static final int MAX_FLOOR = 200;
     static final int MIN_FLOOR = 0;
 
+    /**
+     * Handles POST passenger requests.
+     *
+     * @param exchange HTTP request and response context
+     * @throws IOException if the response cannot be written
+     */
     @Override
     public void handle(HttpExchange exchange) throws IOException{
 
@@ -72,7 +85,14 @@ public class RequestHandler implements HttpHandler{
 
     }
 
-
+    /**
+     * Writes a JSON HTTP response.
+     *
+     * @param exchange HTTP request and response context
+     * @param statusCode HTTP status code
+     * @param response JSON response body
+     * @throws IOException if the response cannot be written
+     */
     public void responseMessage(HttpExchange exchange, int statusCode, String response) throws IOException{
         exchange.getResponseHeaders().set("Content-Type","application/json");
         exchange.sendResponseHeaders(statusCode, response.getBytes().length);

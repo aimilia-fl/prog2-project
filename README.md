@@ -10,7 +10,7 @@
 
 - **Ανδριάνα Βόγλη:** Elevator System Developer, Presentation Designer, Testing Engineer
 
-- **Στέφανος Μουράτογλου:** Back-end Developer, Testing Engineer
+- **Στέφανος Μουράτογλου:** Back-end Developer, UI Developer , Testing Engineer
 
 - **Κυριάκος Σπανάκης:** Project Manager, Evaluation Engineer, Testing Engineer
 
@@ -22,8 +22,9 @@
 
 ## Project Tree
 
+
 ```
-prog2-project
+Elevator_BackEnd
 ├─ config
 │  └─ checkstyle
 │     └─ checkstyle.xml
@@ -44,20 +45,38 @@ prog2-project
    │                 │     └─ StatusHandler.java
    │                 ├─ common
    │                 │  ├─ dto
+   │                 │  │  ├─ ConfigResponse.java
    │                 │  │  ├─ ElevatorResponse.java
    │                 │  │  ├─ ElevatorStatus.java
+   │                 │  │  ├─ MetricsResponse.java
    │                 │  │  ├─ PassengerRequest.java
+   │                 │  │  ├─ ResetResponse.java
+   │                 │  │  ├─ ScenarioRequest.java
    │                 │  │  ├─ StopRequest.java
    │                 │  │  └─ StopResponse.java
    │                 │  └─ exceptions
    │                 │     ├─ BadRequestException.java
    │                 │     ├─ InvalidMethodException.java
+   │                 │     ├─ InvalidStopException.java
    │                 │     └─ MissingSourceFloorException.java
    │                 ├─ elevator
+   │                 │  ├─ handlers
+   │                 │  │  └─ StatusHandler.java
    │                 │  └─ model
    │                 │     ├─ Direction.java
    │                 │     ├─ DoorState.java
-   │                 │     └─ OperatingState.java
+   │                 │     ├─ ElevatorConfig.java
+   │                 │     ├─ OperatingState.java
+   │                 │     ├─ Stop.java
+   │                 │     └─ StopType.java
+   │                 ├─ Evaluation
+   │                 │  ├─ EvaluationMain.java
+   │                 │  ├─ Generator
+   │                 │  │  └─ RandomGenerator.java
+   │                 │  ├─ MathEvaluator
+   │                 │  │  └─ MathEvaluator.java
+   │                 │  └─ Storage
+   │                 │     └─ DataStorage.java
    │                 └─ ui
    │                    └─ UserInterface.java
    └─ test

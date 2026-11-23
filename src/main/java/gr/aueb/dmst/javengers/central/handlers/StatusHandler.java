@@ -11,13 +11,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gr.aueb.dmst.javengers.common.dto.ElevatorStatus;
 
+/**
+ * Fetches the current status of an elevator over HTTP.
+ */
 public class StatusHandler {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Creates a status handler.
+     */
     public StatusHandler() {
     }
 
+    /**
+     * Retrieves and deserializes elevator status.
+     *
+     * @param elevatorUrl URL of the elevator status endpoint
+     * @return elevator status, or {@code null} if unavailable
+     */
     public ElevatorStatus getElevatorStatus(String elevatorUrl) {
         try {
             HttpRequest request = HttpRequest.newBuilder()

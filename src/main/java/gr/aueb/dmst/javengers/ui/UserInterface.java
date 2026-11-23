@@ -25,7 +25,8 @@ public class UserInterface{
     public UserInterface(int sourceFloor){
         this.sourceFloor = sourceFloor;
     }
-
+    
+    //It is protected only for Testing
     protected String sendRequest(int destinationFloor){
 
         try {
@@ -73,23 +74,36 @@ public class UserInterface{
         }
         
         System.out.println("\n============== Elevator Panel ==============");
-        Scanner sc = new Scanner(System.in);
-        UserInterface terminal = new UserInterface(sourceFloor);
+        
+        try (Scanner sc = new Scanner(System.in);){
+                UserInterface terminal = new UserInterface(sourceFloor);
+            while (true){
+                
+                System.out.println("Please select your destination floor or \"exit\" to quit");
+                String input = sc.nextLine().trim();
+                
+                if ("exit".equalsIgnoreCase(input)){
+                    break;
+                }
 
-        while (true){
-            
-            System.out.println("Please select your destination floor or \"exit\" to quit");
-            String input = sc.nextLine().trim();
+                try {
 
-            if ("exit".equalsIgnoreCase(input)) break;
+                    int destinationFloor = Integer.parseInt(input);
+                    
+                    if (destinationFloor < 0 || destinationFloor > 200){
+                        System.err.println("Invalid floor. Please choose a different non-negative floor.");
+                        continue;
+                    }
+                    if (destinationFloor == sourceFloor) {
+                        System.err.println("You are already on this floor. Please select another floor.");
+                        continue;
+                    }
 
-            try {
-
-                int destinationFloor = Integer.parseInt(input);
-                System.out.println(terminal.sendRequest(destinationFloor));
-            
-            } catch (NumberFormatException e){
-                System.err.println("Invalid Input. Please try again");
+                    System.out.println(terminal.sendRequest(destinationFloor));
+                
+                } catch (NumberFormatException e){
+                    System.err.println("Invalid Input. Please try again");
+                }
             }
         }
     }

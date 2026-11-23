@@ -40,13 +40,13 @@ public class StatusHandler {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                System.out.println("Σφάλμα HTTP");
+                System.out.println("ERROR HTTP");
                 return null;
             }
 
             String body = response.body().trim();
             if (body.isEmpty()) {
-                System.out.println("Κενό Json");
+                System.out.println("Null Json");
                 return null;
             }
 
@@ -54,7 +54,7 @@ public class StatusHandler {
             try {
                 status = objectMapper.readValue(body, ElevatorStatus.class);
             } catch (JsonProcessingException exception) {
-                System.out.println("Λάθος Μορφή JSON");
+                System.out.println("WRONG JSON");
                 return null;
             }
 

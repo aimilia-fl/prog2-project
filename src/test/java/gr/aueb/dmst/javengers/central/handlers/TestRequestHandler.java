@@ -64,8 +64,13 @@ public class TestRequestHandler {
     @Test
     public void testValidPassengerRequest() throws Exception {
         String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 6}";
+        System.out.println("Passenger Request:" );
+        System.out.println(dtoBody);
 
         HttpResponse<String> response = sendPostRequest(dtoBody);
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
         
         Assert.assertEquals(200,response.statusCode());
         ElevatorResponse elevatorResponse = objectMapper.readValue(response.body(),ElevatorResponse.class);
@@ -134,7 +139,13 @@ public class TestRequestHandler {
     @Test
     public void testSameSourceDestinationFloor() throws Exception {
         String dtoBody = "{\"sourceFloor\": 3, \"destinationFloor\": 3}";
+        System.out.println("Passenger Request:");
+        System.out.println(dtoBody);
+
         HttpResponse<String> response = sendPostRequest(dtoBody);
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
 
         Assert.assertEquals(400, response.statusCode());
         Assert.assertTrue(response.body().contains("Please use your feet"));
@@ -150,7 +161,14 @@ public class TestRequestHandler {
     public void testNotAvailabeElevators() throws Exception {
         assignedElevator = null;
         String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 6}";
+        System.out.println("Passenger Request:");
+        System.out.println(dtoBody);
+
         HttpResponse<String> response = sendPostRequest(dtoBody);
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
+
         Assert.assertEquals(503,response.statusCode());
     }
 }

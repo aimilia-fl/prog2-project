@@ -61,13 +61,17 @@ public class TestStatusHandler {
 
         ElevatorStatus expected = new ElevatorStatus(
             "A", OperatingState.values()[0],4,Direction.values()[0],
-            DoorState.values()[0],73, Arrays.asList(3)
+            DoorState.values()[0],73, Arrays.asList(6)
         );
 
         String jsonBody = objectMapper.writeValueAsString(expected);
         String url = startMockServer(200, jsonBody);
+        System.out.println("GET " + url);
 
         ElevatorStatus actual = statusHandler.getElevatorStatus(url);
+
+        System.out.println("-------------------------");
+        System.out.println(actual);
 
         Assert.assertNotNull(actual);
         Assert.assertEquals("A", actual.getElevatorId());
@@ -76,7 +80,7 @@ public class TestStatusHandler {
         Assert.assertEquals(expected.getDirection(), actual.getDirection());
         Assert.assertEquals(expected.getDoorState(), actual.getDoorState());
         Assert.assertEquals(73, actual.getCurrentWeight(), 0.001);
-        Assert.assertEquals(Arrays.asList(3), actual.getNextStops());
+        Assert.assertEquals(Arrays.asList(6), actual.getNextStops());
     }
 
     @Test
@@ -96,7 +100,10 @@ public class TestStatusHandler {
     @Test 
     public void testInvalidJsonFormatReturnsNull() throws Exception {
         String url = startMockServer(200, "{wrongJSONFormat}");
+        System.out.println("GET " + url);
         ElevatorStatus actual = statusHandler.getElevatorStatus(url);
+        System.out.println("------------------");
+        System.out.println("Result: " + actual);
         Assert.assertNull(actual);
     }
 

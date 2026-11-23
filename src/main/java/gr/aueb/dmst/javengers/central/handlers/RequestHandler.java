@@ -10,11 +10,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import gr.aueb.dmst.javengers.central.CentralApp;
+import gr.aueb.dmst.javengers.common.dto.ElevatorResponse;
 import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
 
 public class RequestHandler implements HttpHandler{
 
-    public RequestHandler(){}
+    private final CentralApp app;
+
+    public RequestHandler(){
+        this(new CentralApp());
+    }
+    public RequestHandler(CentralApp app){
+        this.app = app;
+    }
     private final ObjectMapper objectMapper = new ObjectMapper();
     static final int MAX_FLOOR = 200;
     static final int MIN_FLOOR = 0;
@@ -63,11 +72,14 @@ public class RequestHandler implements HttpHandler{
             return;
         }
 
+        String assignedElevator = app.assignElevator(request);
+        if (assignedElevator == null){
+            responseMessage(exchange, 503, "{\"error\": \"No operational elevators available\"}");
+            return;
+        }
 
-        //CODE WILL BE ADDED HERE ONCE WE IMPLEMENT DISPATCH ALGORITHM
-
-
-        String successJson = "{\"status\": 200, \"assignedElevator\": \"Elevator-1\"}";
+        ElevatorResponse elevatorResponse = new ElevatorResponse(assignedElevator, 200);
+        String successJson = objectMapper.writeValueAsString(elevatorResponse);
         responseMessage(exchange, 200, successJson);
 
     }

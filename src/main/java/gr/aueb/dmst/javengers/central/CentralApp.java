@@ -17,6 +17,7 @@ import com.sun.net.httpserver.HttpServer;
 import gr.aueb.dmst.javengers.central.handlers.RequestHandler;
 import gr.aueb.dmst.javengers.common.dto.ElevatorStatus;
 import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
+import gr.aueb.dmst.javengers.elevator.model.OperatingState;
 
 public class CentralApp {
 
@@ -37,11 +38,38 @@ public class CentralApp {
 
     }
 
+    public String assignElevator(PassengerRequest passengerRequest){
+        String bestElevatorId = null;
+
+        int minDistance = Integer.MAX_VALUE;
+
+        for (Map.Entry<String,String> entry : elevatorEndpoints.entrySet()){
+            ElevatorStatus status = fetchElevatorStatus(entry.getValue());
+
+            if ((status == null) || (OperatingState.NORMAL != status.getOperatingState())){
+                continue;
+            }
+
+            // Line below will be deleted after dispatch algorithm is implemented
+            int distance = Math.abs(status.getCurrentFloor() - passengerRequest.getDestinationFloor());
+            if (distance < minDistance){
+                minDistance = distance;
+                bestElevatorId = entry.getKey();
+            }
+        }
+            if (bestElevatorId == null) {
+                return null;
+            }
+
+            boolean elevatorSent = sendToElevator(elevatorEndpoints.get(bestElevatorId),passengerRequest);
+            return elevatorSent ? bestElevatorId : null;
+    }
+
     private ElevatorStatus fetchElevatorStatus(String url){
         
         try {
             HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url + "/api/v1/central/requests"))
+            .uri(URI.create(url + "/api/v1/central/status"))
             .header("Content-Type","application/json")
             .GET()
             .build();
@@ -85,7 +113,7 @@ public class CentralApp {
         CentralApp app = new CentralApp();
 
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT),0);
-        server.createContext("/api/v1/central/requests", new RequestHandler());
+        server.createContext("/api/v1/central/requests", new RequestHandler(app));
         server.setExecutor(null);
         server.start();
         System.out.println("Central App is running on Port: " + server.getAddress().getPort());

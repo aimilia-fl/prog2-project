@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gr.aueb.dmst.javengers.Evaluation.Generator.RandomGenerator;
 import gr.aueb.dmst.javengers.common.dto.ConfigResponse;
 import gr.aueb.dmst.javengers.common.dto.ElevatorResponse;
 import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
@@ -56,5 +57,18 @@ public class EvaluationClient {
         } else {
             throw new RuntimeException("Failed to send passenger request: " + response.statusCode());
         }
+    }
+
+    RandomGenerator randomGenerator;
+
+    public void sendPassengerRequestAsync(PassengerRequest passengerRequest) {
+        new Thread(() -> {
+            try {
+                sendPassengerRequest(passengerRequest);
+                randomGenerator.RequestSentSuccessfully();                
+                } catch (Exception e) {
+                    System.err.println("Failed to send passenger request: " + e.getMessage());
+            }
+        }).start();
     }
 }

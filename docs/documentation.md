@@ -3,36 +3,10 @@
 **Ομάδα:** Javengers   
 **Τεχνολογίες:** Java 21, Maven, JDK HTTP Server, Jackson 2.15.2, JUnit 4
 
-## 1. Περιγραφή
 
-Το Next Lifts είναι ένα σύστημα διαχείρισης αιτημάτων ασανσέρ. Αφορά μια κεντρική υπηρεσία που δέχεται το όροφο προέλευσης και τον προορισμό ενός επιβάτη, ελέγχει την κατάσταση του στόλου και επιλέγει διαθέσιμο ασανσέρ.
+## 1. Αρχιτεκτονική
 
-Η τρέχουσα έκδοση υλοποιεί:
-
-- κεντρικό HTTP endpoint για αιτήματα επιβίβασης
-- επικύρωση βασικών περιορισμών ορόφων
-- επιλογή ασανσέρ βάσει της μικρότερης απόστασης από τον προορισμό
-- μοντέλα κατάστασης, διαδρομής και στάσεων ασανσέρ
-- γραμμική διεπαφή χρήστη
-- HTTP handlers για τον κεντρικό server και την κατάσταση ασανσέρ
-- unit και integration tests
-
-## 2. Ομάδα
-
-| Μέλος | Ρόλοι |
-|---|---|
-| Κωνσταντίνος Αλεξόπουλος | Project Manager, API Developer, Build, CI & Integration Lead, Testing Engineer |
-| Ιωάννης Βασταρδής | Back-end Developer, API Developer, Testing Engineer |
-| Ανδριάνα Βόγλη | Elevator System Developer, Presentation Designer, Testing Engineer |
-| Στέφανος Μουράτογλου | Back-end Developer, UI Developer, Testing Engineer |
-| Κυριάκος Σπανάκης | Project Manager, Evaluation Engineer, Testing Engineer |
-| Μενέλαος-Γεώργιος Τσίτας | UI Developer, Testing Engineer |
-| Αιμιλία Φλωρά | Evaluation Engineer, Build, CI & Integration Lead, Testing Engineer |
-| Δήμητρα Ναυπλιώτου | Elevator System Developer, Presentation Designer, Testing Engineer |
-
-## 3. Αρχιτεκτονική
-
-### 3.1 Κεντρική υπηρεσία
+### 1.1 Κεντρική υπηρεσία
 
 Η `CentralApp`:
 
@@ -45,7 +19,7 @@
 
 Αν κανένα ασανσέρ δεν είναι διαθέσιμο ή η αποστολή στο επιλεγμένο ασανσέρ αποτύχει, επιστρέφεται `503` από τον κεντρικό handler.
 
-### 3.2 Request handling
+### 1.2 Request handling
 
 Ο `RequestHandler`:
 
@@ -57,13 +31,13 @@
 - αναθέτει το αίτημα μέσω της `CentralApp`
 - επιστρέφει `ElevatorResponse` σε JSON
 
-### 3.3 Διεπαφή χρήστη
+### 1.3 Διεπαφή χρήστη
 
 Η `UserInterface` δέχεται τον αρχικό όροφο ως command-line argument. Στη συνέχεια ζητά προορισμούς, δημιουργεί `PassengerRequest` και κάνει `POST` στο κεντρικό endpoint.
 
 Παρέχει εξαγωγή για επιτυχή ανάθεση, άκυρο αίτημα, μη επιτρεπτή HTTP μέθοδο και αποτυχία σύνδεσης. Η λέξη `exit` τερματίζει το πρόγραμμα.
 
-### 3.4 Μοντέλο ασανσέρ
+### 1.4 Μοντέλο ασανσέρ
 
 Το πακέτο `gr.aueb.dmst.javengers.elevator.model` περιέχει:
 
@@ -79,7 +53,7 @@
 
 Το `ElevatorConfig` απορρίπτει αντιστραμμένα όρια ορόφων και μη θετικές τιμές ταχύτητας ή φορτίου.
 
-### 3.5 Κοινά δεδομένα και εξαιρέσεις
+### 1.5 Κοινά δεδομένα και εξαιρέσεις
 
 Τα κυριότερα DTO βρίσκονται στο `common.dto`:
 
@@ -94,7 +68,7 @@
 
 Οι custom εξαιρέσεις βρίσκονται στο `common.exceptions` και καλύπτουν άκυρο αίτημα, μέθοδο, στάση και απουσία αρχικού ορόφου.
 
-## 4. Ροή αιτήματος
+## 2. Ροή αιτήματος
 
 ```text
 UserInterface
@@ -108,9 +82,9 @@ UserInterface
   -> ElevatorResponse
 ```
 
-## 5. HTTP API
+## 3. HTTP API
 
-### 5.1 Αίτημα επιβίβασης
+### 3.1 Αίτημα επιβίβασης
 
 **Endpoint**
 
@@ -145,7 +119,7 @@ POST http://localhost:8080/api/v1/central/requests
 | `405` | μέθοδος διαφορετική από `POST` |
 | `503` | κανένα διαθέσιμο ασανσέρ ή αποτυχία προώθησης |
 
-### 5.2 Κατάσταση ασανσέρ
+### 3.2 Κατάσταση ασανσέρ
 
 Ο elevator `StatusHandler` επιστρέφει `ElevatorStatus` μόνο για `GET`:
 
@@ -155,7 +129,7 @@ GET /api/v1/elevators/A/status
 
 Το 405 επιστρέφεται για άλλη μέθοδο. Το 500 επιστρέφεται αν η υπηρεσία κατάστασης δεν παρέχει status.
 
-### 5.3 Dispatch ασανσέρ
+### 3.3 Dispatch ασανσέρ
 
 Η `CentralApp` χρησιμοποιεί:
 
@@ -167,7 +141,7 @@ POST http://localhost:<θύρα-ασανσέρ>/api/v1/elevator/dispatch
 
 > Ο `ElevatorServer` είναι ακόμη κενός και η `ElevatorApp.main()` δεν εκκινεί server. Επομένως, ο τρέχων κώδικας δεν διαθέτει πλήρως υλοποιημένο στόλο και dispatch endpoint. Η περιγραφόμενη διαδρομή αποτελεί τη σχεδιασμένη ενσωμάτωση.
 
-## 6. Δομή έργου
+## 4. Δομή έργου
 
 ```text
 .
@@ -186,7 +160,7 @@ POST http://localhost:<θύρα-ασανσέρ>/api/v1/elevator/dispatch
     └── test/java/gr/aueb/dmst/javengers
 ```
 
-## 7. Εκτέλεση και έλεγχοι
+## 5. Εκτέλεση και έλεγχοι
 
 ### Προϋποθέσεις
 

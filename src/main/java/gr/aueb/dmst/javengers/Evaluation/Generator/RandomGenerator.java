@@ -12,6 +12,8 @@ public class RandomGenerator {
     private final Random random;
     private volatile boolean running;
     private int remainingRequests;
+    int sourceFloor;
+    int destinationFloor;
 
     public RandomGenerator(EvaluationClient evaluationClient, int totalFloors) {
         this.evaluationClient = evaluationClient;
@@ -35,14 +37,21 @@ public class RandomGenerator {
             remainingRequests = 0;
            return;
         }
-
+        
+        do{
         int sourceFloor = random.nextInt(totalFloors);
-        int desstinationFloor = random.nextInt(totalFloors);
-        while (desstinationFloor == sourceFloor) {
-            desstinationFloor = random.nextInt(totalFloors);
-        }
+        } while (sourceFloor >= 0 ); 
+        
+        
+        do { 
+            int destinationFloor = random.nextInt(totalFloors);
+            while (destinationFloor == sourceFloor) {
+            destinationFloor = random.nextInt(totalFloors);
+            }
+        } while (destinationFloor >= 0);
+        
 
-        PassengerRequest passengerRequest = new PassengerRequest(sourceFloor, desstinationFloor);
+        PassengerRequest passengerRequest = new PassengerRequest(sourceFloor, destinationFloor);
         evaluationClient.sendPassengerRequestAsync(passengerRequest);
         remainingRequests--;
     }

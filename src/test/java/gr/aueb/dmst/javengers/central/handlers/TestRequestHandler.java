@@ -15,22 +15,33 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 
+import gr.aueb.dmst.javengers.central.CentralApp;
 import gr.aueb.dmst.javengers.common.dto.ElevatorResponse;
+import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
 
 
 public class TestRequestHandler {
 
     private int port = 8080;
-    private static final String path = "/api/v1/central/requests";
+    private final String path = "/api/v1/central/requests";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private HttpServer server;
     private final HttpClient client = HttpClient.newHttpClient();
+    private String assignedElevator;
 
     @Before
     public void setUp() throws IOException {
         server = HttpServer.create(new InetSocketAddress(0),0);
         port = server.getAddress().getPort();
-        server.createContext(path, new RequestHandler());
+        assignedElevator = "A";
+
+        CentralApp app = new CentralApp() {
+            @Override
+            public String assignElevator(PassengerRequest request) {
+                return assignedElevator;
+            }
+        };
+        server.createContext(path, new RequestHandler(app));
         server.start();
     }
 
@@ -53,12 +64,19 @@ public class TestRequestHandler {
     @Test
     public void testValidPassengerRequest() throws Exception {
         String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 6}";
+        System.out.println("Passenger Request:" );
+        System.out.println(dtoBody);
 
         HttpResponse<String> response = sendPostRequest(dtoBody);
-
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
+        
         Assert.assertEquals(200,response.statusCode());
         ElevatorResponse elevatorResponse = objectMapper.readValue(response.body(),ElevatorResponse.class);
         Assert.assertNotNull(elevatorResponse);
+        Assert.assertEquals("A", elevatorResponse.getAssignedElevator());
+        Assert.assertEquals(200, elevatorResponse.getStatus());
     }
 
     @Test
@@ -121,7 +139,13 @@ public class TestRequestHandler {
     @Test
     public void testSameSourceDestinationFloor() throws Exception {
         String dtoBody = "{\"sourceFloor\": 3, \"destinationFloor\": 3}";
+        System.out.println("Passenger Request:");
+        System.out.println(dtoBody);
+
         HttpResponse<String> response = sendPostRequest(dtoBody);
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
 
         Assert.assertEquals(400, response.statusCode());
         Assert.assertTrue(response.body().contains("Please use your feet"));
@@ -131,6 +155,20 @@ public class TestRequestHandler {
     public void testJsonFormat() throws Exception {
         HttpResponse<String> response = sendPostRequest("{wrongJSONFormat}");
         Assert.assertEquals(400,response.statusCode());
+    }
 
+    @Test
+    public void testNotAvailabeElevators() throws Exception {
+        assignedElevator = null;
+        String dtoBody = "{\"sourceFloor\": 1, \"destinationFloor\": 6}";
+        System.out.println("Passenger Request:");
+        System.out.println(dtoBody);
+
+        HttpResponse<String> response = sendPostRequest(dtoBody);
+        System.out.println("---------------------------------------");
+        System.out.println("Request Response:");
+        System.out.println( response.body());
+
+        Assert.assertEquals(503,response.statusCode());
     }
 }

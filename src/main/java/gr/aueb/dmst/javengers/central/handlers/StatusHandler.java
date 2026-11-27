@@ -11,13 +11,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gr.aueb.dmst.javengers.common.dto.ElevatorStatus;
 
+/**
+ * Fetches the current status of an elevator over HTTP.
+ */
 public class StatusHandler {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Creates a status handler.
+     */
     public StatusHandler() {
     }
 
+    /**
+     * Retrieves and deserializes elevator status.
+     *
+     * @param elevatorUrl URL of the elevator status endpoint
+     * @return elevator status, or {@code null} if unavailable
+     */
     public ElevatorStatus getElevatorStatus(String elevatorUrl) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -28,13 +40,13 @@ public class StatusHandler {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                System.out.println("Σφάλμα HTTP");
+                System.out.println("ERROR HTTP");
                 return null;
             }
 
             String body = response.body().trim();
             if (body.isEmpty()) {
-                System.out.println("Κενό Json");
+                System.out.println("Null Json");
                 return null;
             }
 
@@ -42,7 +54,7 @@ public class StatusHandler {
             try {
                 status = objectMapper.readValue(body, ElevatorStatus.class);
             } catch (JsonProcessingException exception) {
-                System.out.println("Λάθος Μορφή JSON");
+                System.out.println("WRONG JSON");
                 return null;
             }
 

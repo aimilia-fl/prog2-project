@@ -86,6 +86,16 @@ public class ElevatorStatus {
         this.nextStops = nextStops;
     }
 
-
+    @Override 
+    public String toString() {
+        return "ElevatorStatus for Elevator" + elevatorId + ":" + "\n"
+                + " ElevatorId: " + elevatorId + "\n"
+                + " OperatingState: " + operatingState + "\n"
+                + " CurrentFloor: " + currentFloor + "\n"
+                + " Direction: " + direction + "\n"
+                + " DoorState: " + doorState + "\n"
+                + " CurrentWeight: " + currentWeight + "\n"
+                + " NextStops: " + nextStops + "\n";
     }
+ }
 

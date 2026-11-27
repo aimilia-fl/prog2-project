@@ -13,7 +13,7 @@ import gr.aueb.dmst.javengers.elevator.model.ElevatorConfig;
 public class DispatchAlgorithm implements DispatchStrategy {
 
     private static final int DISTANCE_PENALTY = 100;
-    private static final int SAME_DIRECTION_PENALTY = 200;
+    private static final int SAME_DIRECTION_PENALTY = -200;
     private static final int DIFFERENT_DIRECTION_PENALTY = 400;
     private static final int STOP_PENALTY = 80;
 

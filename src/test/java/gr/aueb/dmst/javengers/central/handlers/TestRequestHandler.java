@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -37,8 +38,8 @@ public class TestRequestHandler {
 
         CentralApp app = new CentralApp() {
             @Override
-            public String assignElevator(PassengerRequest request) {
-                return assignedElevator;
+            public Optional<String> assignElevator(PassengerRequest request) {
+                return Optional.ofNullable(assignedElevator);
             }
         };
         server.createContext(path, new RequestHandler(app));

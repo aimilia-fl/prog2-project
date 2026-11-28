@@ -67,7 +67,7 @@ public class Elevator {
         }
 
         if (stop.getTargetFloor() < config.getMinFloor() || stop.getTargetFloor() > config.getMaxFloor()) {
-            throw new IllegalArgumentException("This stop does not excist");
+            throw new InvalidStopException("This stop does not excist");
         }
 
         stopQueue.addStop(stop);

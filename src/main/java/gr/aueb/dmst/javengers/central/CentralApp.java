@@ -75,7 +75,7 @@ public class CentralApp {
         Map<String, ElevatorStatus> fleetStatuses = new HashMap<>();
 
         for (Map.Entry<String, String> entry : elevatorEndpoints.entrySet()) {
-            ElevatorStatus status = handler.getElevatorStatus(entry.getValue());
+            ElevatorStatus status = handler.getElevatorStatus(entry.getValue() + "/api/v1/elevator/status");
             if (status != null && status.getOperatingState() == OperatingState.NORMAL) {
                 fleetStatuses.put(entry.getKey(), status);
             }

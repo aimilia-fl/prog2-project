@@ -41,7 +41,7 @@ public class StatusHandlerTest {
             }
         };
 
-        server = HttpServer.create(new InetSocketAddress(0),0);
+        server = HttpServer.create(new InetSocketAddress(0), 0);
         port = server.getAddress().getPort();
         server.createContext(path, new StatusHandler(statusSupplier));
         server.start();
@@ -52,19 +52,19 @@ public class StatusHandlerTest {
         server.stop(0);
     }
 
-    public HttpResponse<String> sendRequest(String requestType ) throws Exception {
+    private HttpResponse<String> sendRequest(String requestType) throws Exception {
         
         String url = "http://localhost:" + port + path;
         HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .method(requestType, HttpRequest.BodyPublishers.noBody())
-        .build();
+            .uri(URI.create(url))
+            .method(requestType, HttpRequest.BodyPublishers.noBody())
+            .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     /**
-     * Checks that GET returns correctly the elevator status
+     * Checks that GET returns the elevator status
      */
     @Test
     public void testValidGetRequest() throws Exception {
@@ -76,7 +76,7 @@ public class StatusHandlerTest {
     }
 
     /**
-     * Checks that unsupported http method is not allowed
+     * Checks that an unsupported HTTP method is rejected
      */
     @Test 
     public void testWrongMethod() throws Exception {
@@ -100,19 +100,20 @@ public class StatusHandlerTest {
     }
 
     /**
-     * Checks that the response is Json
+     * Checks that the response is JSON
      */
     @Test 
     public void testJsonResponse() throws Exception {
 
         HttpResponse<String> response = sendRequest("GET");
 
-        String contentType = response.headers().firstValue("Content-Type").orElse("Missing");
+        String contentType = response.headers().firstValue("Content-Type")
+                .orElse("Missing");
         Assert.assertEquals("application/json", contentType);
     }
 
     /**
-     * Converts Json to ElevatorStatus 
+     * Converts JSON to ElevatorStatus 
      */
     @Test 
     public void testReadElevatorStatusFromJson() throws Exception {
@@ -120,13 +121,14 @@ public class StatusHandlerTest {
         HttpResponse<String> response = sendRequest("GET");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        ElevatorStatus elevatorStatus = objectMapper.readValue(response.body(), ElevatorStatus.class);
+        ElevatorStatus elevatorStatus =
+                objectMapper.readValue(response.body(), ElevatorStatus.class);
 
         Assert.assertEquals(5, elevatorStatus.getCurrentFloor());
     }
     
     /**
-     * Checks if the new floor is returned
+     * Checks that a changed floor is returned
      */
 
     @Test

@@ -16,7 +16,7 @@ public class StopQueue {
         queue.add(elevStop);
     }
 
-    public Stop getNexStop() {
+    public Stop getNextStop() {
         if (queue.size() == 0) {
             return null;
         }
@@ -29,11 +29,15 @@ public class StopQueue {
         }
     }
 
-    public int remainingStops() {
+    public int getRemainingStops() {
         return queue.size();
     }
 
     public boolean isQueueEmpty() {
         return queue.isEmpty();
+    }
+
+    public void sortStop( int currentFloor, Direction direction) {
+        
     }
 }

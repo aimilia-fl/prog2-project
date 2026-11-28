@@ -24,10 +24,25 @@
 
 
 ```
-Elevator_BackEnd
+.
+├─ .mailmap
+├─ .puml
 ├─ config
 │  └─ checkstyle
 │     └─ checkstyle.xml
+├─ docs
+│  ├─ API.md
+│  └─ documentation.md
+├─ out
+│  └─ output
+│     ├─ central.png
+│     ├─ dtos.png
+│     ├─ elevator.png
+│     ├─ evaluation.png
+│     ├─ exceptions.png
+│     ├─ src
+│     │  └─ src.png
+│     └─ ui.png
 ├─ pom.xml
 ├─ README.md
 └─ src
@@ -40,6 +55,9 @@ Elevator_BackEnd
    │                 ├─ central
    │                 │  ├─ CentralApp.java
    │                 │  ├─ dispatch
+   │                 │  │  ├─ DispatchAlgorithm.java
+   │                 │  │  ├─ DispatchStrategy.java
+   │                 │  │  └─ WeightGenerator.java
    │                 │  └─ handlers
    │                 │     ├─ RequestHandler.java
    │                 │     └─ StatusHandler.java
@@ -60,15 +78,21 @@ Elevator_BackEnd
    │                 │     ├─ InvalidStopException.java
    │                 │     └─ MissingSourceFloorException.java
    │                 ├─ elevator
+   │                 │  ├─ ElevatorApp.java
    │                 │  ├─ handlers
-   │                 │  │  └─ StatusHandler.java
-   │                 │  └─ model
-   │                 │     ├─ Direction.java
-   │                 │     ├─ DoorState.java
-   │                 │     ├─ ElevatorConfig.java
-   │                 │     ├─ OperatingState.java
-   │                 │     ├─ Stop.java
-   │                 │     └─ StopType.java
+   │                 │  │  ├─ StatusHandler.java
+   │                 │  │  ├─ StopAdder.java
+   │                 │  │  └─ StopsHandler.java
+   │                 │  ├─ model
+   │                 │  │  ├─ Direction.java
+   │                 │  │  ├─ DoorState.java
+   │                 │  │  ├─ ElevatorConfig.java
+   │                 │  │  ├─ OperatingState.java
+   │                 │  │  ├─ Stop.java
+   │                 │  │  ├─ StopQueue.java
+   │                 │  │  └─ StopType.java
+   │                 │  └─ server
+   │                 │     └─ ElevatorServer.java
    │                 ├─ Evaluation
    │                 │  ├─ EvaluationMain.java
    │                 │  ├─ Generator
@@ -87,7 +111,20 @@ Elevator_BackEnd
                   └─ javengers
                      ├─ central
                      │  └─ handlers
-                     │     └─ TestRequestHandler.java
+                     │     ├─ TestRequestHandler.java
+                     │     └─ TestStatusHandler.java
+                     ├─ common
+                     │  └─ exceptions
+                     │     └─ InvalidStopExceptionTest.java
+                     ├─ elevator
+                     │  ├─ handlers
+                     │  │  └─ StatusHandlerTest.java
+                     │  └─ model
+                     │     ├─ ElevatorConfigTest.java
+                     │     └─ StopTest.java
+                     ├─ Evaluation
+                     │  └─ MathEvaluator
+                     │     └─ MathEvaluatorTest.java
                      └─ ui
                         └─ TestUserInterface.java
 

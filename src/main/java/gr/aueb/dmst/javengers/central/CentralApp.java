@@ -10,14 +10,18 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 
+import gr.aueb.dmst.javengers.central.dispatch.DispatchAlgorithm;
+import gr.aueb.dmst.javengers.central.dispatch.DispatchStrategy;
 import gr.aueb.dmst.javengers.central.handlers.RequestHandler;
 import gr.aueb.dmst.javengers.central.handlers.StatusHandler;
 import gr.aueb.dmst.javengers.common.dto.ElevatorStatus;
 import gr.aueb.dmst.javengers.common.dto.PassengerRequest;
+import gr.aueb.dmst.javengers.elevator.model.ElevatorConfig;
 import gr.aueb.dmst.javengers.elevator.model.OperatingState;
 
 
@@ -31,10 +35,16 @@ public class CentralApp {
     private static final int ELEVATOR_COUNT = 20;
     private static final int ELEVATOR_PORT = 8081;
 
+    private static final int MIN_FLOOR = 0;
+    private static final int MAX_FLOOR = 200;
+    private static final int SPEED = 1; // 1 second per floor
+    private static final int MAX_WEIGHT = 550;
+
     private final Map<String,String> elevatorEndpoints;
     private final ObjectMapper objectMapper;
     private final HttpClient client;
-
+    private final DispatchStrategy algorithm;
+    private final ElevatorConfig elevatorConfig;
 /**
 * Constructs a new @code CentralApp instance, initializing the elevator
 * endpoint mappings, JSON serializer, and HTTP client.
@@ -46,6 +56,8 @@ public class CentralApp {
         client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(2))
                 .build();
+        this.elevatorConfig = new ElevatorConfig(MIN_FLOOR, MAX_FLOOR, SPEED, MAX_WEIGHT);
+        this.algorithm = new DispatchAlgorithm(elevatorConfig);
 
     }
     
@@ -57,31 +69,27 @@ public class CentralApp {
      * @return the identifier of the assigned elevator (e.g., {@code "A"}), or {@code null} if none is available
      */
 
-    public String assignElevator(PassengerRequest passengerRequest){
-        String bestElevatorId = null;
+    public Optional<String> assignElevator(PassengerRequest passengerRequest){
+        
         StatusHandler handler = new StatusHandler();
-        int minDistance = Integer.MAX_VALUE;
+        Map<String, ElevatorStatus> fleetStatuses = new HashMap<>();
 
-        for (Map.Entry<String,String> entry : elevatorEndpoints.entrySet()){
-
-            ElevatorStatus status = handler.getElevatorStatus(entry.getValue());
-            if ((status == null) || (OperatingState.NORMAL != status.getOperatingState())){
-                continue;
-            }
-
-            // Line below will be deleted after dispatch algorithm is implemented
-            int distance = Math.abs(status.getCurrentFloor() - passengerRequest.getDestinationFloor());
-            if (distance < minDistance){
-                minDistance = distance;
-                bestElevatorId = entry.getKey();
+        for (Map.Entry<String, String> entry : elevatorEndpoints.entrySet()) {
+            ElevatorStatus status = handler.getElevatorStatus(entry.getValue() + "/api/v1/elevator/status");
+            if (status != null && status.getOperatingState() == OperatingState.NORMAL) {
+                fleetStatuses.put(entry.getKey(), status);
             }
         }
-            if (bestElevatorId == null) {
-                return null;
-            }
 
-            boolean elevatorSent = sendToElevator(elevatorEndpoints.get(bestElevatorId),passengerRequest);
-            return elevatorSent ? bestElevatorId : null;
+        Optional<String> bestElevatorId = algorithm.selectElevator(passengerRequest, fleetStatuses);
+            if (bestElevatorId.isEmpty()) {
+                return Optional.empty();
+            }
+            
+            String id = bestElevatorId.get();
+            
+            boolean elevatorSent = sendToElevator(elevatorEndpoints.get(id),passengerRequest);
+            return elevatorSent ? bestElevatorId : Optional.empty();
     }
 
 

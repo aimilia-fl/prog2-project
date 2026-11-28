@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,13 +73,13 @@ public class RequestHandler implements HttpHandler{
             return;
         }
 
-        String assignedElevator = app.assignElevator(request);
-        if (assignedElevator == null){
+        Optional<String> assignedElevator = app.assignElevator(request);
+        if (assignedElevator.isEmpty()){
             responseMessage(exchange, 503, "{\"error\": \"No operational elevators available\"}");
             return;
         }
 
-        ElevatorResponse elevatorResponse = new ElevatorResponse(assignedElevator, 200);
+        ElevatorResponse elevatorResponse = new ElevatorResponse(assignedElevator.get(), 200);
         String successJson = objectMapper.writeValueAsString(elevatorResponse);
         responseMessage(exchange, 200, successJson);
 
